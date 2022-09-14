@@ -28,7 +28,7 @@
 Инструкция с использованием Docker (MacOS, Linux):
 
 ```bash
-git clone git@github.com:sergshumakov/laravel-shop.git && cd laravel-shop
+git clone https://github.com/Leopandro/laravel-shop.git && cd laravel-shop
 
 cp .env.example .env
 
