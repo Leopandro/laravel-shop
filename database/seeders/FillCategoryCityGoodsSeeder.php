@@ -16,7 +16,7 @@ class FillCategoryCityGoodsSeeder extends Seeder
      */
     public function run()
     {
-        ProductCity::factory()->count(30)->create();
+        ProductCity::factory()->count(300)->create();
         ProductCategory::factory()->count(100)->create();
         for ($i = 0; $i < 50000; $i++) {
             Product::factory()->create();

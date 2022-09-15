@@ -18,8 +18,10 @@ class ProductFactory extends Factory
         $productCategory = ProductCategory::inRandomOrder()->first();
         return [
             'uuid' => Uuid::new(),
-            'city_uuid' => $productCity?->uuid,
-            'category_uuid' => $productCategory?->uuid,
+            'properties' => json_encode([
+                'city_uuid' => $productCity?->uuid,
+                'category_uuid' => $productCategory?->uuid,
+            ]),
             'name' => strtoupper($this->faker->bothify('?????-##')),
             'item_price' => $this->faker->numberBetween(10_00, 1000_00),
             'vat_percentage' => $this->faker->randomElement([0, 6, 12, 21]),

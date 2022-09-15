@@ -14,8 +14,7 @@ class AddCategoryCityIds extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->uuid('city_uuid')->nullable();
-            $table->uuid('category_uuid')->nullable();
+            $table->jsonb('properties');
         });
     }
 
@@ -27,8 +26,7 @@ class AddCategoryCityIds extends Migration
     public function down()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('city_uuid');
-            $table->dropColumn('category_uuid');
+            $table->dropColumn('properties');
         });
     }
 }
