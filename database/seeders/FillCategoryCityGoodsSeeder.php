@@ -31,10 +31,10 @@ class FillCategoryCityGoodsSeeder extends Seeder
         $productCityValues = PropertyValue::factory(30)->create([
             'property_name_id' => $productPropertyCity->id
         ]);
-        $productCategoryValues = PropertyValue::factory(30)->create([
+        $productCategoryValues = PropertyValue::factory(100)->create([
             'property_name_id' => $productPropertyCategory->id
         ]);
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 50000; $i++) {
             $product = Product::factory()->create();
 
 
