@@ -13,7 +13,7 @@ trait ProductPropertyBuilder
 {
     public static function getPropertiesList(Request $request, int $id): LengthAwarePaginator
     {
-        return self::buildListQueryForProperties($id)->paginate($request->get('count', 20));
+        return self::buildListQueryForProperties($id)->paginate($request->get('count', 100));
     }
     public static function buildListQueryForProperties(int $id): QueryBuilder
     {
