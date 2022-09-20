@@ -3,7 +3,7 @@
 @endphp
 
 <x-app-layout title="Products">
-        <form action="{{ action(\App\Http\Controllers\Products\ProductIndexController::class) }}" method="get">
+        <form action="{{ route('products.list') }}" method="get">
             @csrf
             <div class="grid grid-cols-2 gap-x-4 gap-y-6 my-12">
                 <div>

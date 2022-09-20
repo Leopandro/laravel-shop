@@ -9,7 +9,7 @@ class CreateProductsTable extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table): void {
-            $table->id();
+            $table->bigIncrements('id');
             $table->uuid('uuid');
             $table->string('name');
             $table->integer('item_price');

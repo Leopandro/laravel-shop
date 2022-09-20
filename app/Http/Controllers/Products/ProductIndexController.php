@@ -1,36 +1,43 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers\Products;
 
-use App\Domain\Category\ProductCategory;
 use App\Domain\Product\Product;
-use App\Domain\ProductCity\ProductCity;
+use App\Domain\ProductProperty\ProductProperty;
+use App\Domain\ProductProperty\PropertyName;
+use App\Domain\ProductProperty\Resource\ProductPropertyResource;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Database\Eloquent\Builder;
 
 class ProductIndexController
 {
-    public function __invoke()
+    public function list(Request $request)
     {
-        $products = QueryBuilder::for(Product::class)
-            ->select(['products.*'])
-            ->allowedFilters([
-                AllowedFilter::callback('city', static function (Builder $query, $values) {
-                    $values = array_filter($values);
-                    $bindingsString = implode(',', array_fill(0, count($values), '?'));
-                    $query->whereRaw("JSON_EXTRACT(properties, '$.city_uuid') in ( {$bindingsString} )", $values);
+        $products = QueryBuilder::for(Product::class)->allowedFilters([
+                AllowedFilter::callback('city', static function ($query, $value) {
+                    $value = array_filter($value);
+                    $query->whereHas('properties', function (Builder $query) use ($value) {
+                        $query->whereIn('property_value_id', $value);
+                    });
                 }),
-                AllowedFilter::callback('category', static function (Builder $query, $values) {
-                    $values = array_filter($values);
-                    $bindingsString = implode(',', array_fill(0, count($values), '?'));
-                    $query->whereRaw("JSON_EXTRACT(properties, '$.category_uuid') in ( {$bindingsString} )", $values);
+                AllowedFilter::callback('category', static function ($query, $value) {
+                    $value = array_filter($value);
+                    $query->whereHas('properties', function (Builder $query) use ($value) {
+                        $query->whereIn('property_value_id', $value);
+                    });
                 }),
-            ])
-            ->paginate();
+        ])->paginate();
+        $cityId = PropertyName::query()->firstWhere(['name' => 'City'])->id;
+        $categoryId = PropertyName::query()->firstWhere(['name' => 'Category'])->id;
+        $cities = ProductPropertyResource::collection(ProductProperty::getPropertiesList($request,$cityId)->all())->toArray($request);
+        $categories = ProductPropertyResource::collection(ProductProperty::getPropertiesList($request,$categoryId)->all())->toArray($request);
+
         $filters = [
-            'cities' => ProductCity::all(),
-            'categories' => ProductCategory::all(),
+            'cities' => $cities,
+            'categories' => $categories,
             'filter' => $_GET['filter'] ?? []
         ];
         return view('products.index', [

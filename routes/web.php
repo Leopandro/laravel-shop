@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', ProductIndexController::class)->name('products');
+Route::get('/', [ProductIndexController::class, 'list'])->name('products.list');
 
 Route::prefix('cart')->group(function () {
     Route::get('/', CartDetailController::class);

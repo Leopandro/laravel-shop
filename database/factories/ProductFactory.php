@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Domain\Category\ProductCategory;
 use App\Domain\Product\Product;
-use App\Domain\ProductCity\ProductCity;
 use App\Support\Uuid;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductFactory extends Factory
 {
@@ -14,14 +13,8 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
-        $productCity = ProductCity::inRandomOrder()->first();
-        $productCategory = ProductCategory::inRandomOrder()->first();
         return [
             'uuid' => Uuid::new(),
-            'properties' => json_encode([
-                'city_uuid' => $productCity?->uuid,
-                'category_uuid' => $productCategory?->uuid,
-            ]),
             'name' => strtoupper($this->faker->bothify('?????-##')),
             'item_price' => $this->faker->numberBetween(10_00, 1000_00),
             'vat_percentage' => $this->faker->randomElement([0, 6, 12, 21]),

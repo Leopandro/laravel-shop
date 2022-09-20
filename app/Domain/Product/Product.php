@@ -3,12 +3,16 @@
 namespace App\Domain\Product;
 
 use App\Domain\Inventory\Projections\Inventory;
+use App\Domain\ProductProperty\ProductProperty;
+use App\Domain\ProductProperty\ProductPropertyValue;
 use Database\Factories\ProductFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
+ * @property int id
  * @property string name
  * @property string uuid
  */
@@ -55,5 +59,10 @@ class Product extends Model
     public function hasAvailableInventory(int $requestedAmount): bool
     {
         return $this->inventory->amount >= $requestedAmount;
+    }
+
+    public function properties(): HasMany
+    {
+        return $this->hasMany(ProductPropertyValue::class);
     }
 }
